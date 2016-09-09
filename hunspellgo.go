@@ -59,9 +59,9 @@ func (handle *Hunhandle) Suggest(word string) []string {
 	defer C.free(unsafe.Pointer(wordcs))
 	var carray **C.char
 	var length C.int
-	handle.lock.Lock()
+	// handle.lock.Lock()
 	length = C.Hunspell_suggest(handle.handle, &carray, wordcs)
-	handle.lock.Unlock()
+	// handle.lock.Unlock()
 
 	if int(length) == 1 {
 		return []string{}
@@ -77,9 +77,9 @@ func (handle *Hunhandle) Stem(word string) []string {
 	defer C.free(unsafe.Pointer(wordcs))
 	var carray **C.char
 	var length C.int
-	handle.lock.Lock()
+	// handle.lock.Lock()
 	length = C.Hunspell_stem(handle.handle, &carray, wordcs)
-	handle.lock.Unlock()
+	// handle.lock.Unlock()
 
 	if int(length) == 1 {
 		return []string{}
@@ -93,9 +93,9 @@ func (handle *Hunhandle) Stem(word string) []string {
 func (handle *Hunhandle) Spell(word string) bool {
 	wordcs := C.CString(word)
 	defer C.free(unsafe.Pointer(wordcs))
-	handle.lock.Lock()
+	// handle.lock.Lock()
 	res := C.Hunspell_spell(handle.handle, wordcs)
-	handle.lock.Unlock()
+	// handle.lock.Unlock()
 
 	if int(res) == 0 {
 		return false
