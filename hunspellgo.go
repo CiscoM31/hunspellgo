@@ -2,7 +2,6 @@ package hunspellgo
 
 import (
 	"runtime"
-	"sync"
 	"unsafe"
 )
 
@@ -14,11 +13,13 @@ import (
 // #include <stdlib.h>
 // #include <stdio.h>
 // #include <hunspell/hunspell.h>
+// void printcstring(char* s) {
+//     printf("CString: %s\n", s);
+// }
 import "C"
 
 type Hunhandle struct {
 	handle *C.Hunhandle
-	lock   *sync.Mutex
 }
 
 func Hunspell(affpath string, dpath string) *Hunhandle {
@@ -26,7 +27,7 @@ func Hunspell(affpath string, dpath string) *Hunhandle {
 	defer C.free(unsafe.Pointer(affpathcs))
 	dpathcs := C.CString(dpath)
 	defer C.free(unsafe.Pointer(dpathcs))
-	h := &Hunhandle{lock: new(sync.Mutex)}
+	h := &Hunhandle{}
 	h.handle = C.Hunspell_create(affpathcs, dpathcs)
 	runtime.SetFinalizer(h, func(handle *Hunhandle) {
 		C.Hunspell_destroy(handle.handle)
@@ -59,9 +60,7 @@ func (handle *Hunhandle) Suggest(word string) []string {
 	defer C.free(unsafe.Pointer(wordcs))
 	var carray **C.char
 	var length C.int
-	// handle.lock.Lock()
 	length = C.Hunspell_suggest(handle.handle, &carray, wordcs)
-	// handle.lock.Unlock()
 
 	if int(length) == 1 {
 		return []string{}
@@ -77,9 +76,7 @@ func (handle *Hunhandle) Stem(word string) []string {
 	defer C.free(unsafe.Pointer(wordcs))
 	var carray **C.char
 	var length C.int
-	// handle.lock.Lock()
 	length = C.Hunspell_stem(handle.handle, &carray, wordcs)
-	// handle.lock.Unlock()
 
 	if int(length) == 1 {
 		return []string{}
@@ -93,12 +90,15 @@ func (handle *Hunhandle) Stem(word string) []string {
 func (handle *Hunhandle) Spell(word string) bool {
 	wordcs := C.CString(word)
 	defer C.free(unsafe.Pointer(wordcs))
-	// handle.lock.Lock()
+	C.printcstring(wordcs)
 	res := C.Hunspell_spell(handle.handle, wordcs)
-	// handle.lock.Unlock()
 
 	if int(res) == 0 {
 		return false
 	}
 	return true
+}
+
+func (handle *Hunhandle) Encoding() string {
+	return C.GoString(C.Hunspell_get_dic_encoding(handle.handle))
 }
