@@ -5,7 +5,7 @@ import (
 	"unsafe"
 )
 
-// #cgo linux LDFLAGS: -L/usr/lib -lhunspell
+// #cgo linux LDFLAGS: -L/usr/lib -lhunspell-1.4
 // #cgo darwin LDFLAGS: -lhunspell-1.4 -L/usr/local/lib
 // #cgo darwin CFLAGS: -I/usr/local/include
 // #cgo freebsd CFLAGS: -I/usr/local/include
@@ -90,7 +90,7 @@ func (handle *Hunhandle) Stem(word string) []string {
 func (handle *Hunhandle) Spell(word string) bool {
 	wordcs := C.CString(word)
 	defer C.free(unsafe.Pointer(wordcs))
-	C.printcstring(wordcs)
+	//C.printcstring(wordcs)
 	res := C.Hunspell_spell(handle.handle, wordcs)
 
 	if int(res) == 0 {
