@@ -5,7 +5,7 @@ import (
 	"unsafe"
 )
 
-// #cgo linux LDFLAGS: -L/usr/lib -lhunspell-1.4
+// #cgo linux LDFLAGS: -L/usr/lib -lhunspell-1.7
 // #cgo darwin LDFLAGS: -lhunspell-1.6 -L/usr/local/lib
 // #cgo darwin CFLAGS: -I/usr/local/include
 // #cgo freebsd CFLAGS: -I/usr/local/include
