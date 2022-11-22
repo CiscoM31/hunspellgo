@@ -5,14 +5,15 @@ import (
 	"unsafe"
 )
 
-// #cgo linux LDFLAGS: -L/usr/lib -lhunspell-1.7
+// #cgo linux CFLAGS: -I${SRCDIR}/hunspell/src
+// #cgo linux LDFLAGS: -L${SRCDIR}/hunspell/src/hunspell/.libs -lhunspell-1.7 -Wl,-rpath=${SRCDIR}/hunspell/src/hunspell/.libs
 // #cgo darwin LDFLAGS: -lhunspell-1.7 -L/usr/local/lib
 // #cgo darwin CFLAGS: -I/usr/local/include
 // #cgo freebsd CFLAGS: -I/usr/local/include
 // #cgo freebsd LDFLAGS: -L/usr/local/lib -lhunspell-1.3
 // #include <stdlib.h>
 // #include <stdio.h>
-// #include <hunspell/hunspell.h>
+// #include "hunspell/hunspell.h"
 // void printcstring(char* s) {
 //     printf("CString: %s\n", s);
 // }

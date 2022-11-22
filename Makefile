@@ -1,0 +1,24 @@
+.DEFAULT_GOAL := hunspellgo
+
+.PHONY: hunspell
+hunspell:
+	[ -d hunspell ] || git -c advice.detachedHead=false clone https://github.com/hunspell/hunspell.git --branch v1.7.1 --single-branch && \
+	set -ex && \
+	cd hunspell && \
+	autoreconf -vfi && \
+	./configure && \
+	make -j $(nproc)
+
+.PHONY: hunspellgo
+hunspellgo: hunspell
+	go build ./...
+	go test ./...
+
+.PHONY: install
+install: hunspell
+	cd hunspell && \
+	make install
+
+.PHONY: clean
+clean:
+	rm -rf hunspell
