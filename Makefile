@@ -6,18 +6,18 @@ hunspell:
 	set -ex && \
 	cd hunspell && \
 	autoreconf -vfi && \
-	./configure && \
+	./configure --prefix=/usr/local && \
 	make -j $(nproc)
 
 .PHONY: hunspellgo
-hunspellgo: hunspell
+hunspellgo: hunspell install
 	go build ./...
 	go test ./...
 
 .PHONY: install
 install: hunspell
 	cd hunspell && \
-	make install
+	sudo make install
 
 .PHONY: clean
 clean:

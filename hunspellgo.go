@@ -5,8 +5,12 @@ import (
 	"unsafe"
 )
 
-// #cgo linux CFLAGS: -I${SRCDIR}/hunspell/src
-// #cgo linux LDFLAGS: -L${SRCDIR}/hunspell/src/hunspell/.libs -lhunspell-1.7 -Wl,-rpath=${SRCDIR}/hunspell/src/hunspell/.libs
+// To test without installing:
+// linux CFLAGS: -I${SRCDIR}/hunspell/src
+// linux LDFLAGS: -L${SRCDIR}/hunspell/src/hunspell/.libs -lhunspell-1.7 -Wl,-rpath=${SRCDIR}/hunspell/src/hunspell/.libs
+
+// #cgo linux CFLAGS: -I/usr/local/include
+// #cgo linux LDFLAGS: -L/usr/local/lib -lhunspell-1.7 -Wl,-rpath=/usr/local/lib
 // #cgo darwin LDFLAGS: -lhunspell-1.7 -L/usr/local/lib
 // #cgo darwin CFLAGS: -I/usr/local/include
 // #cgo freebsd CFLAGS: -I/usr/local/include
