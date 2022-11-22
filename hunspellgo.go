@@ -63,6 +63,7 @@ func CStrings(x **C.char, len int) []string {
 	return s
 }
 
+// Add adds a word to the dictionary.
 func (handle *Hunhandle) Add(word string) error {
 	wordcs := C.CString(word)
 	defer C.free(unsafe.Pointer(wordcs))
@@ -74,6 +75,7 @@ func (handle *Hunhandle) Add(word string) error {
 	return nil
 }
 
+// AddDict adds a custom dictionary.
 func (handle *Hunhandle) AddDict(path string) error {
 	dpathcs := C.CString(path)
 	defer C.free(unsafe.Pointer(dpathcs))
