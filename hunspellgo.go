@@ -1,9 +1,7 @@
 package hunspellgo
 
 import (
-	"bytes"
 	"errors"
-	"fmt"
 	"runtime"
 	"unsafe"
 )
@@ -84,17 +82,19 @@ func (handle *Hunhandle) AddDict(path string) error {
 	// output:
 	// 0 = additional dictionary slots available,
 	// 1 = slots are now full
-	stdout, err := captureWithCGo(func() {
-		res = C.Hunspell_add_dic(handle.handle, dpathcs)
-	})
-	if err != nil {
-		return err
-	}
+	//stdout, err := captureWithCGo(func() {
+	//})
+	res = C.Hunspell_add_dic(handle.handle, dpathcs)
+	/*
+		if err != nil {
+			return err
+		}
+		if bytes.Contains(stdout, []byte("error")) {
+			return fmt.Errorf("failed to load dictionary: %s", stdout)
+		}
+	*/
 	if int(res) != 0 {
 		return errors.New("failed to load dictionary. Slots are full")
-	}
-	if bytes.Contains(stdout, []byte("error")) {
-		return fmt.Errorf("failed to load dictionary: %s", stdout)
 	}
 	return nil
 }
